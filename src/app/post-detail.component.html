@@ -1,0 +1,265 @@
+<style>
+  .rightside {
+    padding-top: 25px;
+    padding-bottom: 25px;
+    border-bottom: thin solid #F7F7F7;
+  }
+  .leftside{
+    overflow: hidden;
+    text-align: center;
+    padding-left: 45px;
+    padding-right: 20px;
+    align-content: center;
+  }
+  .coverImage{
+    object-fit: contain;
+    max-height: 550px;
+  }
+  #storyName {
+    font-size: 28px;
+    font-family: "Times New Roman", Times, serif;
+  }
+  #userDetails {
+    text-transform: uppercase;
+    font-size: 15px;
+  }
+  #postDetails{
+    font-size: 20px;
+  }
+  #type{
+    text-transform: uppercase;
+  }
+  .silver{
+    color:  #808080;
+  }
+  .navbar {
+    margin-bottom: 0;
+    border: 0;
+  }
+  .navbar-brand
+  {
+    position: absolute;
+    font-size: 25px;
+    width: 100%;
+    left: 0;
+    text-align: center;
+    margin:0 auto;
+  }
+
+  #storyHeading{
+    font-weight: 800;
+    padding-top: 45px;
+    padding-bottom: 30px;
+  }
+  .btn{
+    color: black;
+    border-color: black;
+  }
+  #viewLikeComment{
+    display: inline;
+    border-radius: 20px;
+    background-color: #F7F7F7;
+    padding: 12px 12px 12px 12px;
+  }
+  .glyphicon{
+    padding-right:4px;
+    padding-left:4px;
+  }
+  .glyphicon-heart{
+    color:red;
+  }
+  .tags{
+    display: inline-block;
+    padding: 10px 10px 10px 10px;
+    border-radius: 20px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    color:white;
+  }
+ /* #smiley{
+    display: inline;
+  }*/
+  .postCategory{
+    display: inline;
+  }
+  .playButton{
+    top: 40%;
+    left: 40%;
+    cursor: pointer;
+    z-index:10;
+    position: absolute;
+    margin: 0 auto;
+  }
+  .multipleImageContainer{
+    position: absolute;
+    bottom: 0;
+    background-color: black;
+    height: 100px;
+    width: 93%;
+    background: -webkit-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%);
+    background: -o-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%);
+    background: linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 );
+  }
+  .leftImage{
+    padding-top: 10px;
+    cursor: pointer;
+    float: left;
+    text-align:left;
+    width:10%;
+    height:100%
+  }
+  .oneOfMultipleImageContainer{
+    float: left;
+    text-align:center;
+    width:80%;
+    height:100%;
+    overflow-y: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .oneOfMultipleImage{
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 80%;
+    margin-right: 10px;
+    border-radius: 10px;
+    background-color: black;
+  }
+  .rightImage{
+    padding-top: 10px;
+    cursor: pointer;
+    float: left;
+    text-align:right;
+    width:10%;
+    height:100%;
+  }
+  .youtubeContent{
+    background-color: #ffffff;
+    position: absolute;
+    top: 0px;
+    width:70%;
+    height:70%;
+    text-align:center;
+    z-index: 11;
+    position: fixed;
+    margin-top: 100px;
+    margin-left: 15%;
+  }
+
+  .youtubeClose{
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+  }
+
+  .youtubeTop{
+    text-align: left;
+    background-color: black;
+    position: absolute;
+    top: 0px;
+    width:70%;
+    height:20px;
+    z-index: 11;
+    position: fixed;
+    margin-top: 80px;
+    margin-left: 15%;
+  }
+
+  .youtubePostTitle{
+    color: white;
+    text-align: left;
+    font-size: 10px
+  }
+</style>
+<div *ngIf = "postDetailResponseData != null" class = "container-fluid">
+  <div class = "row">
+    <div class = "col col-md-6 leftside">
+      <div  class = "playButton" >
+        <div *ngIf = "isPostVideo()"  >
+          <img src = "resources/icons/play_button.png" height = 40% width = 40% (click)= "$event.stopPropagation()"
+               (click)="playVideo()" />
+        </div>
+      </div>
+
+      <img [src] = "coverImageUrl" class = "coverImage">
+
+      <div *ngIf="imageUrlArray.length > 1 " class = "multipleImageContainer">
+        <div class = "leftImage" (click)="previousImage()">
+          <img src = 'resources/icons/ic_backward.png'>
+        </div>
+        <div class = "oneOfMultipleImageContainer">
+          <div *ngFor = "let imageUrl of imageUrlArray; let i = index;" (click)="getImageUrl(i)" class =
+            "oneOfMultipleImage" [ngStyle]="{'background': 'url(' + imageUrl + ')' , 'background-size': '100% 100%' }" >
+            <!--<img [src] = "imageUrl" style='height: 100%; width: 100%; object-fit: contain'>-->
+          </div>
+        </div>
+        <div class = "rightImage" (click)="nextImage()" >
+          <img src = 'resources/icons/ic_forward.png'>
+        </div>
+      </div>
+    </div>
+    <div class = "col col-md-6" align = "right">
+      <div id = "mainContent">
+        <div id = "postDetails" class = "mx-auto">
+          <div id = "viewLikeComment">
+            <span class="glyphicon glyphicon-eye-open"></span>
+            <span id= "views">{{postDetailResponseData.postDetail.userPost.totalView}}</span>
+            <span class="glyphicon glyphicon-heart"></span>
+            <span id = "likes">{{postDetailResponseData.postDetail.userPost.likes}}</span>
+            <span class="glyphicon glyphicon-comment"></span>
+            <span id = "comments">{{postDetailResponseData.postDetail.userPost.comments}}</span>
+          </div>
+        </div>
+        <div id = "storyName" class = "rightside mx-auto">
+          {{postDetailResponseData.postDetail.userPost.name}}
+        </div>
+        <div id = "userDetails" class = "rightside mx-auto">
+          <span class = "silver" id = "userName">{{postDetailResponseData.postDetail.userPost.nameOfUser}} </span>
+          POSTED TO
+          <span class = "silver" id = "bookName">{{postDetailResponseData.postDetail.userPost.books[0].bookName}}</span>
+        </div>
+        <div class = "rightside mx-auto silver">
+          <div *ngFor = "let postCategory of postCategoryArray" class = "postCategory" >
+            <img [src] = "getPostCategoryImage(postCategory)" id= "smiley" height = "40px" width = "45px" >
+            <span id = "type">
+            {{postCategory.tagsName}}
+            </span>
+          </div>
+        </div>
+        <div id= "savedInMain" class = "rightside mx-auto">
+          <span *ngFor = "let saveIn of saveInArray; let i = index">
+            <span *ngIf = "saveIn" class = "tags" [ngStyle]="{'background-color': getRandomColor(i) }">{{saveIn}}</span>
+          </span>
+        </div>
+        <div class = "rightside mx-auto">
+          <button id = "readmore" class= "btn btn-warning">Read More</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf = "postDetailResponseData!= null" class = "container-fluid">
+
+    <h3 id= "storyHeading">STORY BODY</h3>
+    <div *ngIf="postDetailsStoryBody" [innerHTML] = "postDetailsStoryBody()"></div>
+</div>
+
+<div *ngIf = "showYoutubePlayer == true">
+  <div class="youtubeTop">
+    <!-- <div class="col-md-6 youtubePostTitle">
+            <span>{{postArray.postTitle}}</span>
+        </div> -->
+    <div class="col-md-1">
+      <img src="resources/icons/cross_white.png" class="youtubeClose" (click)="closeVideo()"/>
+    </div>
+
+  </div>
+  <div class = "youtubeContent" >
+    <iframe id="youtube_iframe" name="youtube_iframe"  width="100%" height="100%" [src]="youtubePlayerURL"></iframe>
+  </div>
+</div>

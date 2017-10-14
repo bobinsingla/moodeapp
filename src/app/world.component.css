@@ -1,0 +1,119 @@
+@media only screen and (min-width: 700px) {
+	    .col-md-5ths{
+			width:20%;
+		}
+	}
+	.mainContainer{
+		position: relative;
+		height:400px;
+		cursor: pointer;
+	}
+	.topMainContainer{
+		height: 70%;
+	}
+	/* .sideMainContainer{
+		width: 5%;
+		height: 100%;
+		position: relative;
+		display: inline;
+		float: left;
+		http://colorzilla.com/gradient-editor/#000000+65,000000+100&0.65+62,0+100
+		background: -moz-linear-gradient(left, rgba(0,0,0,0.65) 62%, rgba(0,0,0,0.6) 65%, rgba(0,0,0,0) 100%); FF3.6-15
+		background: -webkit-linear-gradient(left, rgba(0,0,0,0.65) 62%,rgba(0,0,0,0.6) 65%,rgba(0,0,0,0) 100%); Chrome10-25,Safari5.1-6
+		background: linear-gradient(to right, rgba(0,0,0,0.65) 62%,rgba(0,0,0,0.6) 65%,rgba(0,0,0,0) 100%); W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=1 ); IE6-9
+	} */
+
+	.bookInfo{
+		position: relative;
+		display: inline;
+		float: left;
+		height:100%;
+		width:80%;
+	}
+	.viewsBitsFollowers{
+		color: #6b6b6b;
+		position: relative;
+		display: inline;
+		float: right;
+		width:20%;
+		height: 70%;
+		text-align: center;
+		padding-top: 20px;
+	}
+	.glyphicon{
+		display: block;
+	}
+	
+	
+	.bookInfo .bookName{
+		position: absolute;
+		padding-left: 20px;
+		bottom: 0;
+		width: 99%;
+		color:white;
+		font-family: Helvetica;
+		font-size: 12px;
+		font-weight: bold;
+		text-align: left;
+		border-radius: 13px;
+		background: -webkit-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
+		background: -o-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
+		background: linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);  
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 );
+	}
+	/* .fold{
+		display: block;
+		width: 40px;
+		height: 40px;
+		float: right;
+	
+	}
+	.makeFold { 
+	  width: 0; 
+	  height: 0; 
+	  border-top: 40px solid gray; 
+	  border-left: 40px solid white;
+	  border-top-right-radius: 15px;
+	} */
+
+	.userDetails{
+		display: block;
+		position: relative;
+		height:30%;
+		padding-top: 20px;
+	}
+	.userProfilePic{
+		display: inline;
+		float: left;
+		width: 35px;
+  		height: 35px;
+  		border-radius: 50%;
+	}
+	.userNameRole{
+		display: inline;
+		position: absolute;
+		padding-left: 20px;
+	}
+	.userName{
+		display: block;
+	  	font-family: Helvetica;
+	  	font-size: 10px;
+	  	font-weight: bold;
+	  	text-align: left;
+	  	color: #6b6b6b;
+	}
+	.userRole{
+		display: block;
+	  	font-family: Helvetica;
+	  	font-size: 9px;
+	  	text-align: left;
+	  	color: #6b6b6b;
+	}
+	button:focus{
+		color:red;
+	}
+	.totalMargin{
+		margin-top: 8px;
+		margin-bottom: 8px;
+	}

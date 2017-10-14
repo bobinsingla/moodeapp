@@ -1,0 +1,37 @@
+<style>
+  .container-fluid{
+    width: 100%;
+  }
+  .container-fluid .navbar-header{
+    text-align: center;
+  }
+  .navbar{
+    margin: 0;
+  }
+  .btn{
+    margin-top: 8px;
+    margin-right: 8px;
+  }
+  .navbar-brand{
+    font-weight: bold;
+  }
+</style>
+<div *ngIf =loggingIn>
+  <login-app (change)="isLoggingIn($event[0], $event[1], $event[2])"></login-app>
+</div>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" routerLink = ''>MOODe</a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li *ngIf = "loggedIn; else notLoggedIn">
+        {{firstName}}
+      </li>
+      <ng-template #notLoggedIn>
+        <button class="btn btn-warning" (click) = isLoggingIn(false,true)>Join</button>
+      </ng-template>
+    </ul>
+  </div>
+</nav>
+<mood-bar [userSignUpResponseData] = userSignUpResponseData></mood-bar>

@@ -1,0 +1,147 @@
+<style>
+ /* .navbar{
+    display: inline-block;
+    position: relative;
+    border: 0;
+    height: 90px;
+    overflow: -moz-scrollbars-horizontal;
+  }
+  .navbar-center .navbar-inner {
+    text-align: center;
+  }
+  .navbar-center .navbar-inner .nav {
+    float: none;
+    display:inline-block;
+  }*/
+  .mainMoodBarContainer{
+    width: 100%;
+    height: 90px;
+    position: relative;
+  }
+  .worldContainer {
+    cursor: pointer;
+    float: left;
+    text-align:right;
+    width:10%;
+    height:100%
+  }
+  .shopContainer {
+    cursor: pointer;
+    float: left;
+    text-align:left;
+    width:10%;
+    height: 100%;
+  }
+
+  .moodBarContainer {
+    position: relative;
+    float: left;
+    text-align:center;
+    width:80%;
+    height: 90px;
+    overflow-y: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .moodBarContainer div{
+    display: inline-block;
+  }
+
+  .moodBarDetails{
+    position: relative;
+    height:100%;
+    width: 70px;
+    cursor:pointer;
+  }
+
+ .moodBarImage {
+   float: inherit;
+   height: 70%;
+  }
+
+ .moodBarText{
+   position: absolute;
+   font-family: HelveticaNeue,monospace;
+   bottom: 0;
+   height: 30%;
+   font-size:10px;
+ }
+  .moodChildContainer {
+    border: 0;
+    margin-top: 0;
+    margin-left: 30px;
+  }
+  .moodChild {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    margin-right: 10px;
+  }
+  .moodChildName{
+    position:absolute;
+    height: 20%;
+    width:100%;
+    color: white;
+    bottom: 0;
+    padding-left: 10%;
+    font-size: 10px;
+    background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 );
+  }
+</style>
+<div class = "mainMoodBarContainer ">
+  <a routerLink="/shop">
+  <div class = "shopContainer">
+    <img src = "resources/icons/shop_icon.png" height="70px" width="70px">
+  </div>
+  </a>
+  <div class = "moodBarContainer">
+    <div *ngIf = "userSignUpResponseData">{{ userSignUpResponseData.firstName }}</div>
+    <div *ngFor = "let moodBar of moodBarArray" (click) = getMoodBarChildren(moodBar)>
+      <div class ="moodBarDetails">
+        <div class = "moodBarImage">
+          <img [src] = "getMoodImage(moodBar)" style='height: 100%; width: 100%; object-fit: contain'>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a routerLink="/world">
+  <div class = "worldContainer">
+    <img src= "resources/icons/world_icon.png" height="70px" width="70px">
+  </div>
+  </a>
+</div>
+<!--<nav class="navbar navbar-default  navbar-center"  role="navigation">
+  <div class="navbar-inner">
+    <ul class="nav navbar-nav">
+      <li *ngIf = "userSignUpResponseData">{{ userSignUpResponseData.firstName }}</li>
+      <li *ngFor = "let moodBar of moodBarArray" (click) = getMoodBarChildren(moodBar)>
+        <div class ="moodBarDetails">
+          <div class = "moodBarImage">
+            <img [src] = "getMoodImage(moodBar)" style='height: 100%; width: 100%; object-fit: contain'></div>
+          <div class = "moodBarText">{{moodBar}}</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>-->
+<div *ngIf = "moodSelected === true">
+  <nav class="moodChildContainer navbar navbar-default">
+    <ul class="nav navbar-nav">
+      <li *ngFor = "let moodBarChild of moodBarChildrenArray">
+        <div class= "moodChild" [ngStyle]="{'background': 'url(' + getMoodBarChildImage(moodBarChild) + ')' , 'background-size': '100% 100%' }">
+          <div class = moodChildName>
+            {{moodBarChild.tagsName}}
+          </div>
+            <!--<img [src] = "getMoodBarChildImage(moodBarChild)"
+          height="90px"
+          width="90px">-->
+        </div>
+      </li>
+    </ul>
+  </nav>
+</div>
+

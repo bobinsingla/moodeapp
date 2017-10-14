@@ -1,0 +1,66 @@
+<body>
+<ng-container *ngIf="!rerender">
+<div *ngIf="homePostArray!=null">
+  <div class = "wholeHomePage">
+    <masonry [options]="myOptions" >
+      <masonry-brick  *ngFor = "let post of homePostArray; let i = index;"  class = 'col col-md-5ths col-xs-12 home' >
+        <div class = "postData"
+             [ngStyle]="{'background': 'url(' + getHomePostImageUrl(post, i) + ')' , 'background-size': '100% 100%' }" [style.height.px]="checkPostHeight(post)" (click)="goToDetail(post)">
+<!--
+           <img [src] = "getHomePostImageUrl(post, i)" style="visibility:hidden">
+-->
+          <div *ngIf = " post.postCover == null || post.postCover.length == 0 " class = "elseTemplate">
+            <span class = "postTitleWithOutImage"> {{ post.postTitle }} </span>
+          </div>
+          <div  class = "playButton" >
+            <div *ngIf = "isPostVideo(post)"  >
+              <img src = "resources/icons/play_button.png" height = 40% width = 40% (click)= "$event.stopPropagation()"
+                   (click)="playVideo(post)" />
+            </div>
+          </div>
+          <div class = "content">
+						<span *ngIf = " post.postCover.length != 0 " class = "postTitleWithImage">
+							{{ post.postTitle }} </span>
+            <div >
+              <div class = "userProfileImage" [ngStyle]="{'background': 'url(' + getUserProfileImage(post, i) + ')' , 'background-size': '100% 100%' }"></div>
+              <div class = "profileNameImage">
+                <span id = "nameOfUser">{{ post.nameOfUser }}</span>
+                <div class = "likesViews">
+                  <span class="glyphicon glyphicon-heart"></span>
+                  <span id = "likes">{{ post.likes }}</span>
+                  <span class="glyphicon glyphicon-eye-open"></span>
+                  <span id = "views">{{ post.totalView }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </masonry-brick>
+    </masonry>
+  </div>
+</div>
+</ng-container>
+<!--<div class = "loadMore" (click)= "$event.stopPropagation()">
+  <button *ngIf = "pageId > 4" (click) = "loadMore()">Load Page No.{{pageId}}</button>
+</div>-->
+<!-- <div [ngStyle]="{ 'background-image': 'url(http://res.cloudinary.com/moode-cloudinary/image/upload/v1504506749/j39xtj6b4qituof2ppcg.jpg)'}"></div> -->
+<div *ngIf = "showYoutubePlayer == true">
+  <div class="youtubeTop">
+    <!-- <div class="col-md-6 youtubePostTitle">
+            <span>{{postArray.postTitle}}</span>
+        </div> -->
+    <div class="col-md-1">
+      <img src="app/close.png" class="youtubeClose" (click)="closeVideo()"/>
+    </div>
+
+  </div>
+  <div class = "youtubeContent" >
+    <iframe id="youtube_iframe" name="youtube_iframe"  width="100%" height="100%" [src]="youtubePlayerURL"></iframe>
+  </div>
+</div>
+
+<div *ngIf = "pageId > 4" class = "container loadMore" (click)= "loadMore()">
+  Load Page No.{{pageId}}
+</div>
+
+</body>
