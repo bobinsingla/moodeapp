@@ -9,6 +9,8 @@ import 'rxjs/add/operator/map';
 export class HomePostService {
 
   private homePostApi = 'https://moodeapp.in/app/userWebHome';
+  private homePostLoginApi= 'https://moodeapp.in/app/userHomeV3_2';
+  private moodHomePostApi = 'https://moodeapp.in/app/webExploreBySection';
 
   constructor ( private http: Http ) {
   }
@@ -17,6 +19,19 @@ export class HomePostService {
     let headers = new Headers ({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers, method: 'post' });
     return this.http.post ( this.homePostApi , homePostRequestData , options )
+      .map((res: Response) => res.json())
+  }
+  getHomePostDataWithLogin(homePostRequestDataWithLogin: {}){
+    let headers = new Headers ({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers, method: 'post' });
+    return this.http.post ( this.homePostLoginApi , homePostRequestDataWithLogin , options )
+      .map((res: Response) => res.json())
+  }
+
+  getMoodHomePostData(moodHomePostRequestData: {}){
+    let headers = new Headers ({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers, method: 'post' });
+    return this.http.post ( this.moodHomePostApi , moodHomePostRequestData , options )
       .map((res: Response) => res.json())
   }
 }

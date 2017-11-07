@@ -13,7 +13,13 @@
 		color: white;
 		font-size: 12px;
 		font-weight: bold;
+    overflow-y: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
 	}
+  .sectionBar div{
+    display: inline-block;
+  }
 	.publishers{
 		display: inline-block;
 		height:100%;
@@ -39,13 +45,20 @@
    html body{
      height:100%;
    }
+  .headerBackground{
+    background-color: white;
+    color: black;
+    border-color:black;
+    border-radius: 4px;
+  }
  </style>
 
-<div [ngStyle]="{'background-image': 'url(' + getBackgroundImage() + ')', 'background-size': '5% 100%'}" class = "sectionBar">
-	<div class = "publishers" [ngClass]="{ 'publishers-active': isActive  }" (click) = getRole(1,2) >BLOGGERS</div>
-	<div class = "publishers" [ngClass]="{ 'publishers-active': isActive  }" (click) = getRole(1,1) >PUBLISHERS</div>
-	<span class = "publishers" [ngClass]="{ 'publishers-active': isActive  }" (click) = getRole(1,0)>FEATURED</span>
-	<span class = "publishers" [ngClass]="{ 'publishers-active': isActive  }" (click) = getRole(1,3)>FRIENDS</span>
+<div [ngStyle]="{'background-image': 'url(' + getBackgroundImage() + ')', 'background-size': '5% 100%'}" class =
+  "sectionBar">
+	<div class = "publishers" [ngClass]= backgroundCss2 (click) = getRole(1,2) >BLOGGERS</div>
+	<div class = "publishers" [ngClass]= backgroundCss1 (click) = getRole(1,1) >PUBLISHERS</div>
+	<div class = "publishers" [ngClass]= backgroundCss0 (click) = getRole(1,0)>FEATURED</div>
+	<div class = "publishers" [ngClass]= backgroundCss3 (click) = getRole(1,3)>FRIENDS</div>
 </div>
 
 <masonry [options]="myOptions" >

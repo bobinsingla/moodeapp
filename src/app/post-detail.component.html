@@ -12,7 +12,7 @@
     align-content: center;
   }
   .coverImage{
-    object-fit: contain;
+    object-fit: cover;
     max-height: 550px;
   }
   #storyName {
@@ -31,19 +31,6 @@
   }
   .silver{
     color:  #808080;
-  }
-  .navbar {
-    margin-bottom: 0;
-    border: 0;
-  }
-  .navbar-brand
-  {
-    position: absolute;
-    font-size: 25px;
-    width: 100%;
-    left: 0;
-    text-align: center;
-    margin:0 auto;
   }
 
   #storyHeading{
@@ -174,6 +161,28 @@
     text-align: left;
     font-size: 10px
   }
+  .postDetailContent{
+    background-color: #ffffff;
+    position: absolute;
+    top: 0px;
+
+    width:100%;
+    height:100%;
+    text-align:center;
+    z-index: 11;
+    position: fixed;
+    margin-top: 160px;
+  }
+  .postDetailTop{
+    text-align: left;
+    background-color: black;
+    position: absolute;
+    top: 140px;
+    width:100%;
+    height:20px;
+    z-index: 11;
+    position: fixed;
+  }
 </style>
 <div *ngIf = "postDetailResponseData != null" class = "container-fluid">
   <div class = "row">
@@ -235,18 +244,21 @@
             <span *ngIf = "saveIn" class = "tags" [ngStyle]="{'background-color': getRandomColor(i) }">{{saveIn}}</span>
           </span>
         </div>
-        <div class = "rightside mx-auto">
-          <button id = "readmore" class= "btn btn-warning">Read More</button>
+        <div *ngIf = "postDetailResponseData.postDetail.userPost.url" class = "rightside mx-auto">
+          <button id = "readmore" class= "btn btn-warning" (click) = "showPostDetails()">Read More</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div *ngIf = "postDetailResponseData!= null" class = "container-fluid">
-
-    <h3 id= "storyHeading">STORY BODY</h3>
-    <div *ngIf="postDetailsStoryBody" [innerHTML] = "postDetailsStoryBody()"></div>
+<div *ngIf = "postDetailResponseData != null" class = "container-fluid">
+  <h3 id= "storyHeading">STORY BODY</h3>
+  <div *ngFor="let storyBodyText of storyBodyTextArray">
+    <div [innerHTML] = "storyBodyText"></div>
+  </div>
+    <!--<div [innerHTML] = "postDetailsStoryBody()"></div>-->
+  <br /> <br />
 </div>
 
 <div *ngIf = "showYoutubePlayer == true">
@@ -257,9 +269,22 @@
     <div class="col-md-1">
       <img src="resources/icons/cross_white.png" class="youtubeClose" (click)="closeVideo()"/>
     </div>
-
   </div>
   <div class = "youtubeContent" >
     <iframe id="youtube_iframe" name="youtube_iframe"  width="100%" height="100%" [src]="youtubePlayerURL"></iframe>
   </div>
 </div>
+<div *ngIf = "isPostDetails == true">
+  <div class="postDetailTop">
+    <!-- <div class="col-md-6 youtubePostTitle">
+            <span>{{postArray.postTitle}}</span>
+        </div> -->
+    <div class="col-md-1">
+      <img src="resources/icons/cross_white.png" class="youtubeClose" (click)="closePost()"/>
+    </div>
+  </div>
+  <div class = "postDetailContent" >
+    <iframe width="100%" height="100%" [src]="postUrl"></iframe>
+  </div>
+</div>
+<login-app *ngIf = "notLoggedIn == true"></login-app>

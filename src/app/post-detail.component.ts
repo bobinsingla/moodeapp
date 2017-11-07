@@ -26,6 +26,12 @@ export class PostDetailComponent implements OnInit {
   coverImageUrl:any;
   imageUrlArray: Array<any>;
   indexOfCoverImage:number= 0;
+  isStoryBodyText:boolean=  false;
+  storyBodyTextArray: Array<any>;
+  isPostDetails: boolean = false;
+  postUrl:any;
+  sessionId:string;
+  notLoggedIn:boolean = false;
 
   constructor(
     private postDetailService: PostDetailService,
@@ -67,7 +73,7 @@ export class PostDetailComponent implements OnInit {
     this.getImageUrl(this.indexOfCoverImage);
     this.getPostCategory();
     this.getPostSaveIn();
-
+    this.postDetailsStoryBody();
   }
 
   getImageUrl(index: number) {
@@ -75,7 +81,7 @@ export class PostDetailComponent implements OnInit {
     console.log(index);
     let url = [];
     let postCover = this.postDetailResponseData.postDetail.userPost.postCover;
-    if (postCover != null && postCover.length > 0) {
+    if (postCover != null && postCover.length > 0 && postCover[0].url != null) {
       for(let i = 0; i < postCover.length; i++ ){
         if (postCover[i].url.indexOf("http") == -1) {
           url.push('http://res.cloudinary.com/moode-cloudinary/image/upload/v1504506749/' + postCover[i].url)
@@ -110,8 +116,10 @@ export class PostDetailComponent implements OnInit {
 
   isPostVideo():boolean{
     let videoPost = false;
-    if(this.postDetailResponseData.postDetail.userPost.postCover[0].type === 1){
-      videoPost = true;
+    if(this.postDetailResponseData.postDetail.userPost.postCover.length > 0){
+      if(this.postDetailResponseData.postDetail.userPost.postCover[0].type === 1){
+        videoPost = true;
+      }
     }
     return videoPost
   }
@@ -160,8 +168,52 @@ export class PostDetailComponent implements OnInit {
   }
 
   postDetailsStoryBody(){
-    let text = this.sanitizer.bypassSecurityTrustHtml(this.postDetailResponseData.postDetail.userPost.postBody[0].text);
-    return text
+    let postBody = this.postDetailResponseData.postDetail.userPost.postBody;
+    let bodyText= [] ;
+    let storyBodyText = [];
+    let imageInBody;
+    for(let i = 0; i< postBody.length; i++){
+      if(postBody[i].type == 2){
+        imageInBody = 'http://res.cloudinary.com/moode-cloudinary/image/upload/v1504506749/'+ postBody[i].url;
+        bodyText.push("<img src=" + imageInBody + ">"+"<br /><br />");
+      }
+      if(postBody[i].type == 4){
+        bodyText.push(postBody[i].text + "<br />")
+      }
+      if(postBody[i].type == 1){
+        imageInBody = postBody[i].url;
+        bodyText.push("<div (click) = 'playStoryVideo()'>" + "<img src=" + imageInBody + ">"+"</div>"+"<br /><br />");
+      }
+      storyBodyText.push(this.sanitizer.bypassSecurityTrustHtml(bodyText[i]));
+    }
+    this.storyBodyTextArray = storyBodyText;
+    console.log(this.storyBodyTextArray);
+    /*let bodyTextString = bodyText.toString();
+    console.log("bodyTextString",bodyTextString);
+    let text = this.sanitizer.bypassSecurityTrustHtml(bodyTextString);
+    if(text != null ){
+      this.isStoryBodyText = true;
+    }
+    return text*/
+  }
+
+  playStoryVideo(){
+    console.log("playing");
+  }
+
+  showPostDetails(){
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if(currentUser){
+      this.sessionId = currentUser.token;
+      this.isPostDetails = true;
+      this.postUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.postDetailResponseData.postDetail.userPost.url);
+    }else{
+      console.log("loginApp");
+      this.notLoggedIn = true
+    }
+  }
+  closePost(){
+    this.isPostDetails = false;
   }
 }
 

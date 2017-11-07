@@ -7,7 +7,67 @@
 
 </head>
 <style>
-	.sectionBar{
+  .shopMain {
+    position: relative;
+    height: 220px;
+    padding: 10px 10px 10px 10px;
+    margin-bottom: 40px;
+  }
+
+  .eachShopContent{
+    cursor: pointer;
+    padding-left: 30%;
+    padding-right: 30%;
+    width: 100%;
+    height: 180px;
+    background-color: #E3E3E3;
+  }
+  .eachShopContent img {
+    height: 100%;
+    width: 100%;
+  }
+
+  .productInformation{
+    height: 20%;
+    width: 100%;
+  }
+  .productName{
+    width: 100%;
+    height: 8px;
+    font-family: HelveticaNeue,monospace;
+    font-size: 12px;
+    font-weight: bold;
+    color: black;
+    overflow-x: hidden;
+
+  }
+  .heart_icon {
+    width: 8.7px;
+    height: 7.9px;
+  }
+  .views-eye-copy-8 {
+    width: 15.3px;
+    height: 8.7px;
+  }
+
+  .likes{
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .productInformation .mrpToRight {
+    float:right;
+    padding-right: 10px;
+    color:red;
+    font-weight: bold;
+    text-decoration: line-through;
+  }
+  .productInformation .sellingPriceToRight{
+    float:right;
+    padding-left: 10px;
+    font-weight: bold;
+  }
+  .sectionBar{
 		height: 50px;
 		width: 100%;
 		color: white;
@@ -31,30 +91,57 @@
 		position: relative;
 		width: 100%;
 		height: 100px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 0;
 	}
+  .subCategory div {
+    display: inline-block;
+  }
+
 	.subCategoryImage{
-		display: inline-block;
-		float: left;
+    position: relative;
+    height:60px;
+    width:60px;
+    margin-right: 10px;
 	}
+  .subCategoryName{
+    position:absolute;
+    height: 20%;
+    color: white;
+    width: 100%;
+    bottom: 0;
+    font-size: 10px;
+    padding-left: 10px;
+    background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 );
+  }
 </style>
 <div class = "container-fluid">
 	<div [ngStyle]="{'background-image': 'url(' + getBackgroundImage() + ')', 'background-size': '5% 100%'}" class = "sectionBar">
-		<div *ngFor = "let category of categoryArray" class = "col col-md-3 publishers" (click) = getCategory(category.shopID) (click) = getSubCategory(category.shopID)>
+		<div *ngFor = "let category of categoryArray" class = "col col-md-3 publishers" [ngClass]="getBackgroundCss(category)" (click)="getDataByCategory(category)">
 			{{ category.shopName }}
 		</div>
 	</div>
+
 	<div class = "subCategory">
-		<div *ngFor= "let subCategory of subCategoryMenArray"  (click) = getCategory(subCategory.subCatId)>
-			<div class = "subCategoryImage">
-				<img [src] = "getSubCategoryImage(subCategory)" width="50px" height="50px">
+		<div *ngFor= "let subCategory of subCategoryDetailArray"
+         (click) = getShopSubCategory(subCategory)>
+				<!--<img [src] = "getSubCategoryImage(subCategory)" width="50px" height="50px" >-->
+        <div class= "subCategoryImage" [ngStyle]="{'background': 'url(' + getSubCategoryImage(subCategory) + ')' , 'background-size': '100% 100%' }">
+          <div class = "subCategoryName">
+            {{ subCategory.subCatName }}
+          </div>
 			</div>
 		</div>
 	</div>
 
-	<div *ngFor = " let shopContent of shopContentArray " class = "col col-md-3 shopMain">
+	<div *ngFor = " let shopContent of shopContentArray " class = "shopMain col col-md-3">
 		<div>
-			<div class = "eachShopContent">			
-				<img src={{getShopImageUrl(shopContent)}} />
+			<div class = "eachShopContent" (click)="goToProductDetail(shopContent)" >
+				<img [src]=getShopImageUrl(shopContent) />
 			</div>
 				<div class = "productInformation" align="left">
 					<span class = "productName">{{ shopContent.name }}</span><br/>
@@ -65,6 +152,6 @@
 					<span *ngIf = productSellingPrice(shopContent) class = "sellingPriceToRight"><i class="fa fa-inr"></i>{{ shopContent.sellingPrice }}</span>
 					<span *ngIf = productMRP(shopContent) class = "mrpToRight"><i class="fa fa-inr"></i>{{shopContent.mrp}}</span>
 				</div>
-		</div>		
+		</div>
 	</div>
 </div>

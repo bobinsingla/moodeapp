@@ -13,6 +13,13 @@ import { ShopComponent} from './shop.component';
 import { WorldComponent } from './world.component';
 import { WorldDetailComponent } from './world-detail.component';
 import { PostDetailComponent } from './post-detail.component';
+import { UserProfileComponent} from './user-profile.component';
+import { ShopProductDetailComponent } from './shop-product-detail.component';
+import { SettingComponent } from './setting.component';
+
+import { LoginService} from "./login.service";
+import { SharedService } from './shared.service';
+import { CommonSharedService } from './common-shared.service';
 
 @NgModule({
   imports:      [
@@ -35,13 +42,33 @@ import { PostDetailComponent } from './post-detail.component';
         component: ShopComponent
       },
       {
+        path: 'shop/:id',
+        component: ShopProductDetailComponent
+      },
+      {
         path: 'world',
         component: WorldComponent
       },
       {
         path: 'world/:id',
         component: WorldDetailComponent
-      }
+      },
+      {
+        path: 'userprofile/:id',
+        component: UserProfileComponent
+      },
+      {
+        path: 'setting',
+        component: SettingComponent
+      },
+      {
+        path: ':id',
+        component: HomePostComponent
+      },
+      {
+        path: ':id/:id2',
+        component: HomePostComponent
+      },
     ])
   ],
   declarations: [
@@ -53,8 +80,12 @@ import { PostDetailComponent } from './post-detail.component';
     PostDetailComponent,
     ShopComponent,
     WorldComponent,
-    WorldDetailComponent
+    WorldDetailComponent,
+    ShopProductDetailComponent,
+    UserProfileComponent,
+    SettingComponent
   ],
-  bootstrap:    [ AppComponent ]
+  bootstrap:    [ AppComponent ],
+  providers: [LoginService, SharedService, CommonSharedService]
 })
 export class AppModule { }

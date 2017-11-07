@@ -1,8 +1,9 @@
-import { Component,Input, Output, EventEmitter, OnInit, AfterViewInit, ElementRef } from '@angular/core';
+import { Component,Input, Output, EventEmitter, OnInit, AfterViewInit, ElementRef, Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Login } from './login';
 import { LoginService } from './login.service'
+import { SharedService } from './shared.service';
 
 declare var window: any;
 declare var FB: any;
@@ -14,14 +15,19 @@ declare const gapi: any;
   providers: [LoginService]
 })
 
+@Injectable()
 export class LoginComponent{
   loggedIn:boolean = false;
   loggingIn:boolean = false;
+  loginResponseData:any;
+  sessionID:string = '';
 
   @Output()
   change: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private loginService: LoginService){}
+  constructor(private loginService: LoginService, private sharedService: SharedService){
+
+  }
 
   getLoginData(){
     let loginRequestData = {
@@ -40,6 +46,8 @@ export class LoginComponent{
       "time":"2017-9-7 15:22:18",
       "timeZone":"Asia/Calcutta",
     };
+    let time = new Date();
+    loginRequestData['time'] = time.toLocaleString();
     this.loginService.getLoginData(loginRequestData)
     .subscribe((loginResponseData) => {
       this.loginResponseHandler(loginResponseData);
@@ -47,11 +55,21 @@ export class LoginComponent{
   }
 
   loginResponseHandler(loginResponseData:any){
+    this.sessionID = loginResponseData.socialSignUp.sessionID;
+    localStorage.setItem('currentUser', JSON.stringify({ token: this.sessionID}));
+    this.sharedService.shareUserData(loginResponseData.socialSignUp);
+    this.loginResponseData = loginResponseData;
+    console.log(this.loginResponseData);
     this.loggedIn = true;
     this.loggingIn = false;
-    this.change.emit([this.loggedIn, this.loggingIn, loginResponseData]);
+    this.change.emit([this.loggedIn, this.loggingIn]);
+    //this.loginResponse()
   }
 
+ /* loginResponse(){
+    console.log(this.loginResponseData);
+    this.loginResponseData;
+  }*/
 
   me(userId:any, accessToken:any){
   FB.api(

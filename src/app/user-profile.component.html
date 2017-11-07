@@ -1,0 +1,204 @@
+<style>
+  .userProfilePage{
+    padding-top: 50px;
+    padding-left: 50px;
+  }
+  .userProfileDetails{
+    width: 60%;
+  }
+  .userPofileName{
+    font-family: Helvetica;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: left;
+    color: #6b6b6b;
+    margin-bottom: 10px;
+  }
+  .col-md-3{
+    margin-left: 0;
+    padding-left: 0;
+  }
+  .userProfileDetailInfo{
+    font-weight: bold;
+    font-size: 22px;
+  }
+  .userProfilePic{
+    display: inline-block;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+  }
+
+  @media only screen and (min-width: 700px) {
+    .col-md-5ths{
+      width:20%;
+    }
+  }
+  .mainContainer{
+    position: relative;
+    height:400px;
+    cursor: pointer;
+  }
+  .topMainContainer{
+    height: 70%;
+  }
+
+  .bookInfo{
+    position: relative;
+    display: inline;
+    float: left;
+    height:100%;
+    width:80%;
+  }
+  .viewsBitsFollowers{
+    color: #6b6b6b;
+    position: relative;
+    display: inline;
+    float: right;
+    width:20%;
+    height: 70%;
+    text-align: center;
+    padding-top: 20px;
+  }
+  .glyphicon{
+    display: block;
+  }
+  .bookInfo .bookName{
+    position: absolute;
+    padding-left: 20px;
+    bottom: 0;
+    width: 99%;
+    color:white;
+    font-family: Helvetica;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: left;
+    border-radius: 13px;
+    background: -webkit-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
+    background: -o-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
+    background: linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 );
+  }
+  .userDetails{
+    display: block;
+    position: relative;
+    height:30%;
+    padding-top: 20px;
+  }
+  .userProfilePicOnPost{
+    display: inline;
+    float: left;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+  }
+  .userNameRole{
+    display: inline;
+    position: absolute;
+    padding-left: 20px;
+  }
+  .userName{
+    display: block;
+    font-family: Helvetica;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: left;
+    color: #6b6b6b;
+  }
+  .userRole{
+    display: block;
+    font-family: Helvetica;
+    font-size: 9px;
+    text-align: left;
+    color: #6b6b6b;
+  }
+  button:focus{
+    color:red;
+  }
+  .totalMargin{
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+  img {
+    width: 106%;
+    height: 106%;
+    display: block;
+  }
+</style>
+<div *ngIf="userProfileView">
+  <div *ngIf = "userData != null" class = "userProfilePage col-md-9">
+    <div class = "userProfileDetails col-md-6">
+      <div class = "userPofileName">{{userData.name}}</div>
+      <div class = "aboutMe">{{userData.aboutMe}}</div>
+      <div class = "userDetails">
+        <div class = "noOfStoryboards col-md-3">
+          <span class="userProfileDetailInfo">{{userData.exploreUsersBooks.length}}</span>
+            <br />
+          <span class="userProfileDetailNames">Storyboards</span>
+        </div>
+        <div class = "noOfPosts col-md-3">
+          <span class="userProfileDetailInfo">{{userData.posts.length}}</span>
+          <br />
+          <span class="userProfileDetailNames">Posts</span>
+        </div>
+        <div class = "followers col-md-3">
+          <span class="userProfileDetailInfo">{{userData.folloowers}}</span>
+          <br />
+          <span class="userProfileDetailNames">Followers</span>
+        </div>
+        <div class = "following col-md-3">
+          <span class="userProfileDetailInfo">{{userData.folloowing}}</span>
+          <br />
+          <span class="userProfileDetailNames">Following</span>
+        </div>
+      </div>
+    </div>
+    <div class = "userProfilePic col-md-6"
+         [ngStyle]="{'background': 'url(' + getUserProfilePic() + ')' , 'background-size': '100% 100%' }">
+    </div>
+    <div class = "col-md-3">
+      <button (click) = "goToSetting()">Settings</button>
+    </div>
+  </div>
+  <div class = "container-fluid">
+    <div class = "col-md-12">
+      <br />
+      <br />
+      MY STORYBOARDS:
+      <br />
+    <masonry [options]="myOptions" >
+      <masonry-brick *ngFor = "let worldContent of worldContentArray; let i = index" class = "col col-md-5ths col-xs-12">
+        <div class = mainContainer (click)="goToWorldPage(worldContent)">
+          <div class = "topMainContainer">
+            <div class = "bookInfo"
+                 [ngStyle]="{'background': 'url(' + getBookCoverImage(worldContent, i) + ')' , 'background-size': '100% 100%' }"><img
+              [src] =
+                                                                                                                    "bookImage">
+              <div class = "bookName">{{worldContent.userBook.bookName}}</div>
+            </div>
+            <div class = viewsBitsFollowers>
+              <div class="glyphicon glyphicon-eye-open" ></div>
+              <span class = "glyphicon totalMargin">{{worldContent.userBook.totalView}}</span>
+              <div class="glyphicon glyphicon-pencil" ></div>
+              <span class = "glyphicon totalMargin">{{worldContent.userBook.totalBites}}</span>
+              <div class="glyphicon glyphicon-user" ></div>
+              <span class = "glyphicon totalMargin">{{worldContent.userBook.totalFollower}}</span>
+            </div>
+          </div>
+          <div class = "userDetails">
+            <div class = "userProfilePicOnPost" [ngStyle]="{'background': 'url(' + getUserProfilePic() + ')' , 'background-size': '100% 100%' }"></div>
+            <div class = "userNameRole">
+              <span class = "userName">{{ worldContent.userBook.userName}}</span>
+              <span class = "userRole">{{ worldContent.userBook.userRole}}</span>
+            </div>
+          </div>
+        </div>
+      </masonry-brick>
+    </masonry>
+    </div>
+  </div>
+</div>
+<div *ngIf = "viewSetting">
+  <setting></setting>
+</div>
+

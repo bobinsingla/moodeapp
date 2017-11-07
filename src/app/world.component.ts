@@ -23,11 +23,17 @@ export class WorldComponent{
 	pageId: number = 1;
 	isPublisher:number = 2;
 	worldContent:any;
-	isActive:boolean = false;
+	isActive:boolean = true;
 	bookImage:string = "resources/background/storyboard_book_cover.png";
+  backgroundCss1:string;
+  backgroundCss2:string;
+  backgroundCss3:string;
+  backgroundCss0:string;
+
 
 	constructor(private worldService: WorldService,private http: Http, private router: Router,){
 		this.getData(this.pageId, this.isPublisher);
+    this.getRoleCss(this.isPublisher);
 	}
 
 	@HostListener("window:scroll", [])
@@ -47,6 +53,36 @@ export class WorldComponent{
     this.isPublisher = isPublisher;
     this.worldContentArray = [];
     this.getData(id, isPublisher);
+    this.getRoleCss(isPublisher)
+  }
+
+  getRoleCss(value:number){
+    switch(value){
+      case 0:
+        this.backgroundCss0='headerBackground';
+        this.backgroundCss1= 'publishers';
+        this.backgroundCss2= 'publishers';
+        this.backgroundCss3= 'publishers';
+        break;
+      case 1:
+        this.backgroundCss1='headerBackground';
+        this.backgroundCss0= 'publishers';
+        this.backgroundCss2= 'publishers';
+        this.backgroundCss3= 'publishers';
+        break;
+      case 2:
+        this.backgroundCss2='headerBackground';
+        this.backgroundCss1= 'publishers';
+        this.backgroundCss0= 'publishers';
+        this.backgroundCss3= 'publishers';
+        break;
+      case 3:
+        this.backgroundCss3='headerBackground';
+        this.backgroundCss1= 'publishers';
+        this.backgroundCss2= 'publishers';
+        this.backgroundCss0= 'publishers';
+        break;
+    }
   }
 
 	getData(id:number, isPublisher:number){
@@ -103,7 +139,6 @@ export class WorldComponent{
 		let profilePic = "";
 		if(worldContent.userBook.profilePic){
 			profilePic = 'http://res.cloudinary.com/moode-cloudinary/image/upload/v1504506749/' + worldContent.userBook.profilePic
-
 		}
 		else{
 			profilePic='resources/icons/user_profile_1.png';

@@ -1,0 +1,204 @@
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<style>
+  .rightside {
+    padding-top: 25px;
+    padding-bottom: 25px;
+    border-bottom: thin solid #F7F7F7;
+  }
+  .leftside{
+    overflow: hidden;
+    text-align: center;
+    padding-left: 45px;
+    padding-right: 20px;
+    align-content: center;
+  }
+  .coverImage{
+    object-fit: contain;
+    max-height: 550px;
+  }
+  #storyName {
+    font-size: 28px;
+    font-family: "Times New Roman", Times, serif;
+  }
+  #postDetails{
+    font-size: 20px;
+  }
+  #viewLikeComment{
+    display: inline;
+    border-radius: 20px;
+    background-color: #F7F7F7;
+    padding: 12px 12px 12px 12px;
+  }
+  .glyphicon{
+    padding-right:4px;
+    padding-left:4px;
+  }
+  .glyphicon-heart{
+    color:red;
+  }
+
+  .product{
+    font-size: 19px;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    color: #1a1a1a;
+  }
+
+  .mrp {
+    font-size: 18px;
+    font-weight: bold;
+    color: #9b9b9c;
+  }
+
+  .sellingPrice{
+    font-size: 18px;
+    font-weight: bold;
+    color: #ea3a3a;
+  }
+
+  .buyButton{
+    width: 80px;
+    height: 27px;
+    border-radius: 4px;
+    background-color: #fdc202;
+    text-align: center;
+    border: solid thin;
+  }
+
+  .moreDetails{
+    font-family: HelveticaNeue,sans-serif;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: right;
+  }
+
+  .aboutProduct{
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .productDetails{
+    font-size: 20px;
+  }
+  .mrp{
+    text-decoration: line-through;
+    padding-right: 20px;
+  }
+
+  /*.multipleImageContainer{
+    position: absolute;
+    bottom: 0;
+    background-color: black;
+    height: 100px;
+    width: 93%;
+    background: -webkit-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%);
+    background: -o-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%);
+    background: linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6000000',GradientType=0 );
+  }
+  .leftImage{
+    padding-top: 10px;
+    cursor: pointer;
+    float: left;
+    text-align:left;
+    width:10%;
+    height:100%
+  }
+  .oneOfMultipleImageContainer{
+    float: left;
+    text-align:center;
+    width:80%;
+    height:100%;
+    overflow-y: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .oneOfMultipleImage{
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 80%;
+    margin-right: 10px;
+    border-radius: 10px;
+    background-color: black;
+  }
+  .rightImage{
+    padding-top: 10px;
+    cursor: pointer;
+    float: left;
+    text-align:right;
+    width:10%;
+    height:100%;
+  }*/
+
+</style>
+<div *ngIf = "productDetailResponseData != null"  class = "container-fluid">
+  <div class = "row">
+    <div class = "col col-md-6 leftside">
+
+      <img [src] = "getCoverImageUrl()" class = "coverImage">
+
+      <!--<div *ngIf="imageUrlArray.length > 1 " class = "multipleImageContainer">
+        <div class = "leftImage" (click)="previousImage()">
+          <img src = 'resources/icons/ic_backward.png'>
+        </div>
+        <div class = "oneOfMultipleImageContainer">
+          <div *ngFor = "let imageUrl of imageUrlArray; let i = index;" (click)="getImageUrl(i)" class =
+            "oneOfMultipleImage" [ngStyle]="{'background': 'url(' + imageUrl + ')' , 'background-size': '100% 100%' }" >
+            &lt;!&ndash;<img [src] = "imageUrl" style='height: 100%; width: 100%; object-fit: contain'>&ndash;&gt;
+          </div>
+        </div>
+        <div class = "rightImage" (click)="nextImage()" >
+          <img src = 'resources/icons/ic_forward.png'>
+        </div>
+      </div>-->
+    </div>
+    <div class = "col col-md-6" align = "right">
+      <div id = "mainContent">
+        <div id = "postDetails" class = "mx-auto">
+          <div id = "viewLikeComment">
+            <span class="glyphicon glyphicon-eye-open"></span>
+            <span id= "views">{{productDetailResponseData.totalView}}</span>
+            <span class="glyphicon glyphicon-heart"></span>
+            <span id = "likes">{{productDetailResponseData.totalLikes}}</span>
+            <span class="glyphicon glyphicon-comment"></span>
+            <span id = "comments">{{productDetailResponseData.totalComments}}</span>
+          </div>
+        </div>
+        <div id = "storyName" class = "rightside mx-auto">
+          {{productDetailResponseData.name}}
+        </div>
+        <div class = "rightside mx-auto">
+          <span class = "product">PRODUCT</span> <br /><br />
+          <span *ngIf = "productDetailResponseData.mrp != 0" class = "mrp">
+            <i class="fa fa-inr"></i>
+            {{productDetailResponseData.mrp}}</span>
+          <span *ngIf = "productDetailResponseData.sellingPrice != 0" class = "sellingPrice">
+            <i class="fa fa-inr"></i>{{productDetailResponseData.sellingPrice}}
+          </span>
+        </div>
+        <div class = "rightside mx-auto">
+          <a [href] =  productDetailResponseData.productPageMaskingUrl >
+            <div class = "buyButton">BUY</div>
+          </a>
+        </div>
+        <div class = "rightside mx-auto">
+          <span class = "aboutProduct">ABOUT PRODUCT</span> <br /><br />
+          <span class = "productDetails" >
+            <div *ngFor="let key of objectKeys(productDetailResponseData.productAtr)">{{key + ' : ' + productDetailResponseData.productAtr[key]}}</div>
+          </span>
+          <br />
+          <span class = "moreDetails">For more details about the product click on the buy button</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,4 +1,21 @@
 <body>
+<!--<div *ngIf = "moodSelected === true">
+  <nav class="moodChildContainer navbar navbar-default">
+    <ul class="nav navbar-nav">
+      <li *ngFor = "let moodBarChild of moodBarChildrenArray" (click) = moodBarChildHandler(moodBarChild)>
+        <div class= "moodChild" [ngStyle]="{'background': 'url(' + getMoodBarChildImage(moodBarChild) + ')' , 'background-size': '100% 100%' }">
+          <div class = moodChildName>
+            {{moodBarChild.tagsName}}
+          </div>
+          &lt;!&ndash;<img [src] = "getMoodBarChildImage(moodBarChild)"
+        height="90px"
+        width="90px">&ndash;&gt;
+        </div>
+      </li>
+    </ul>
+  </nav>
+</div>-->
+
 <ng-container *ngIf="!rerender">
 <div *ngIf="homePostArray!=null">
   <div class = "wholeHomePage">

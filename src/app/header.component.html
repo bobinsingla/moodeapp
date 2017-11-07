@@ -1,37 +1,161 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
-  .container-fluid{
-    width: 100%;
-  }
-  .container-fluid .navbar-header{
-    text-align: center;
-  }
-  .navbar{
-    margin: 0;
+  .navbar-fixed-top{
+    margin-bottom: 10px;
   }
   .btn{
     margin-top: 8px;
     margin-right: 8px;
   }
-  .navbar-brand{
+  .headerContainer{
+    width: 100%;
+    height: 50px;
+    position: relative;
+  }
+  .leftContainer {
+    float: left;
+    text-align:right;
+    width:20%;
+    height:100%
+  }
+  .middleContainer {
+    float: left;
+    text-align:center;
+    width:60%;
+    height: 100%;
+  }
+  @media only screen and (max-width: 500px) {
+    .middleContainer {
+      float: left;
+      text-align:left;
+      width:55%;
+      height: 100%;
+    }
+    .leftContainer {
+      display: none;
+    }
+
+    .userName{
+      display: none;
+    }
+    .rightContainer {
+      cursor: pointer;
+      float: right;
+      text-align: right;
+      width: 12%;
+      height: 100%;
+    }
+    .shopContainer{
+      margin-top: 8px;
+      cursor: pointer;
+      float: right;
+      text-align: center;
+      width: 12%;
+      height: 100%;
+    }
+    .worldContainer{
+      margin-top: 8px;
+      cursor: pointer;
+      float: right;
+      text-align: center;
+      width: 12%;
+      height: 100%;
+    }
+  }
+  @media only screen and (min-width: 500px) {
+    .shopContainer {
+      display: none;
+    }
+
+    .worldContainer {
+      display: none;
+    }
+
+    .rightContainer {
+      float: left;
+      text-align:right;
+      width: 20%;
+      height:100%
+    }
+  }
+  .logoName{
+    margin-top: 8px;
     font-weight: bold;
+    font-size: 24px;
+  }
+  .userName{
+    margin-left: 10px;
+    margin-top: 10px;
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .userProfilePic{
+    float: right;
+    margin-top: 10px;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .affix {
+    top: 0;
+    width: 100%;
+    z-index: 9999 !important;
+  }
+
+  .affix + .container-fluid {
+    padding-top: 70px;
   }
 </style>
 <div *ngIf =loggingIn>
-  <login-app (change)="isLoggingIn($event[0], $event[1], $event[2])"></login-app>
+  <login-app (change)="isLoggingIn($event[0], $event[1])"></login-app>
 </div>
-<nav class="navbar navbar-default">
+<!--<nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" routerLink = ''>MOODe</a>
     </div>
     <ul class="nav navbar-nav navbar-right">
-      <li *ngIf = "loggedIn; else notLoggedIn">
-        {{firstName}}
+      <li *ngIf = "loggedIn; else notLoggedIn" (click)="goToUserProfile()">
+        <span class = "userName"> {{ userName }} </span>
+        <span class = "userProfilePic"></span>
       </li>
       <ng-template #notLoggedIn>
         <button class="btn btn-warning" (click) = isLoggingIn(false,true)>Join</button>
       </ng-template>
     </ul>
   </div>
+</nav>-->
+<div class = "headerContainer container-fluid">
+  <div class = "leftContainer"></div>
+  <div class = "middleContainer">
+    <div class = "logoName">MOODe</div>
+  </div>
+  <div class = "rightContainer">
+    <div class = "joinButton">
+      <div *ngIf = "loggedIn; else notLoggedIn" (click)="goToUserProfile()">
+        <span class = "userName"> {{ userName }} </span>
+        <span class = "userProfilePic"
+              [ngStyle]="{'background': 'url(' + getUserProfilePic() + ')' , 'background-size': '100% 100%' }"></span>
+      </div>
+      <ng-template #notLoggedIn>
+        <button class="btn btn-warning" (click) = isLoggingIn(false,true)>Join</button>
+      </ng-template>
+    </div>
+  </div>
+  <div class="worldContainer">
+    <a routerLink="/world"><img src= "resources/icons/world_icon.png" height="70%" width="80%"></a>
+  </div>
+  <div class="shopContainer">
+    <a routerLink="/shop"><img src = "resources/icons/shop_icon.png" height="70%" width="80%"></a>
+  </div>
+</div>
+<nav data-spy="affix" data-offset-top="197">
+  <mood-bar [userSignUpResponseData] = userSignUpResponseData></mood-bar>
 </nav>
-<mood-bar [userSignUpResponseData] = userSignUpResponseData></mood-bar>

@@ -1,7 +1,6 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { Router } from '@angular/router'
 import { ShopService } from './shop.service';
-import { Http, Response, RequestOptions, Headers } from '@angular/http';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
 	selector: 'my-shop',
@@ -11,43 +10,41 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 })
 
 
-
-export class ShopComponent {
-	Name = "Shop";
+export class ShopComponent implements OnInit{
 	shopContentArray:Array<any> = [];
 	shopResponseData: any = [];
 	pageId: number = 1;
 	categoryId: any = "1";
 	categoryArray:Array<any> = [];
 	subCategoryArray: Array<any> = [];
-	subCategoryMenArray: Array<any>= [];
-	subCategoryWomenArray: Array<any>= [];
+	subCategoryDetailArray: Array<any>= [];
 
-	constructor(private shopService: ShopService, private http: Http) {}
+	constructor(
+	  private shopService: ShopService,
+    private router: Router
+  ) {}
 
 	ngOnInit(): void {
-    	this.getData(this.pageId, this.categoryId);
+    	this.getShopData(this.pageId, this.categoryId);
     	this.getShopCategory();
-    	this.getSubCategory(1);
-    	this.getShopSubCategory();
     }
 
     @HostListener("window:scroll", [])
     onWindowScroll() {
-       if(document.body.scrollTop + document.body.clientHeight== document.body.scrollHeight) {
+       if(document.documentElement.scrollTop + document.documentElement.clientHeight== document.documentElement.scrollHeight) {
            if(this.shopContentArray !=null && this.shopContentArray[this.shopContentArray.length-1]!=null)
            {
             this.pageId++;
-            this.getData(this.pageId, this.categoryId);
+            this.getShopData(this.pageId, this.categoryId);
           }
 
        }
     }
 
 
-	getData(id:number, categoryId:any){
+	getShopData(id:number, categoryId:any){
 		let requestShopData = {
-			"brandList": '',
+			"brandList": [""],
 			"careerName": "web",
 			"categoryIDsList": ["1"],
 			"deviceName": "browser",
@@ -61,7 +58,7 @@ export class ShopComponent {
 			"productType": "",
 			"sessionID": "xpdJhbCPRrxkpZyY",
 			"shortType": "popularity",
-			"storeIDsList":'' ,
+			"storeIDsList": ["1"] ,
 			"time": "2017-8-16 13:1:23",
 			"timeZone": "Asia/Calcutta",
 		};
@@ -77,84 +74,102 @@ export class ShopComponent {
 
 		this.shopService.getData(requestShopDataJson).subscribe(shopResponseData => {
     		console.log("shopResponseData", shopResponseData);
-    		this.shopHandler(shopResponseData);
+    		this.shopDataHandler(shopResponseData);
     	})
 	}
 
+  shopDataHandler(shopResponseData: any){
+    let newObj  = shopResponseData.getShopProducts;
+    for (let i = 0; i < newObj.productList.length; ++i) {
+      this.shopContentArray.push(newObj.productList[i]);
+    }
+  }
+
 	getShopCategory(){
-		let shopApi = "https://moodeapp.in/app/getShopCategory";
-		let shopCategoryRequest = {
+		let shopCategoryRequestData = {
 			"careerName":"web",
 			"deviceName":"browser",
 			"platform":"browser",
 			"time":"2017-8-23 18:26:54",
 			"timeZone":"Asia/Calcutta",
 		};
-		let headers = new Headers ({ 'Content-Type': 'application/json' });
-		let options = new RequestOptions({ headers: headers, method: "post" });
-		return this.http.post(shopApi, shopCategoryRequest, options)
-			.map((res: Response) => res.json())
+
+		this.shopService.getShopCategory(shopCategoryRequestData)
 			.subscribe(shopCategoryResponse => {
     			console.log("shopCategoryResponse", shopCategoryResponse);
     			this.shopCategoryHandler(shopCategoryResponse);
 			});
 	}
 
-	getShopSubCategory(){
-		let shopSubCategoryApi = "https://moodeapp.in/app/getShopSubCategory";
+  shopCategoryHandler(shopCategoryResponse: any){
+    this.categoryArray = shopCategoryResponse.getShopCategory.shopCategory ;
+    this.subCategoryArray = shopCategoryResponse.getShopCategory.shopSubCategory;
+    this.getSubCategory(this.categoryArray[0])
+  }
 
-		let shopSubCategoryRequest = {
-			"careerName":"web",
-			"deviceName":"browser",
-			"imei":"1071216312982030",
-			"platform":"browser",
-			"sessionID":"FXdhzLWtywPcikST",
-			"shopID":"1",
-			"subCatId":"1",
-			"time":"2017-8-25 17:16:57",
-			"timeZone":"Asia/Calcutta",
-		};
+  getSubCategory(category: any){
+    let subCat = this.subCategoryArray;
+    this.subCategoryDetailArray = [];
+    console.log("subCat", subCat);
+    for(let i = 0; i< this.subCategoryArray.length; i++){
+      if(this.subCategoryArray[i].shopID == category.shopID){
+        this.subCategoryDetailArray.push(subCat[i])
+      }
+    }
+  }
 
-		let headers = new Headers ({ 'Content-Type': 'application/json' });
-		let options = new RequestOptions({ headers: headers, method: "post" });
-		return this.http.post(shopSubCategoryApi, shopSubCategoryRequest, options)
-			.map((res: Response) => res.json())
-			.subscribe(shopSubCategoryResponse => {
-    			console.log("shopSubCategoryResponse", shopSubCategoryResponse);
-/*    			this.shopCategoryHandler(shopCategoryResponse);
-*/			});
+	getShopSubCategory(subCategory:any){
+    this.shopContentArray = [];
+    this.categoryId = subCategory.subCatId;
+    this.getShopData(this.pageId, this.categoryId);
+    console.log("sub cat",subCategory);
+    if(subCategory.child == false) {
+      let shopSubCategoryRequestData = {
+        "careerName": "web",
+        "deviceName": "browser",
+        "imei": "1071216312982030",
+        "platform": "browser",
+        "sessionID": "FXdhzLWtywPcikST",
+        "shopID": "1",
+        "subCatId": "1",
+        "time": "2017-8-25 17:16:57",
+        "timeZone": "Asia/Calcutta",
+      };
+      shopSubCategoryRequestData["subCatId"] = subCategory.subCatId;
+      shopSubCategoryRequestData["shopID"] = subCategory.shopID;
+      this.shopService.getShopSubCategory(shopSubCategoryRequestData)
+        .subscribe(shopSubCategoryResponse => {
+          console.log("shopSubCategoryResponse", shopSubCategoryResponse);
+          this.shopSubCategoryResponseHandler(shopSubCategoryResponse);
+        });
+    }
 	}
 
-	shopHandler(shopResponseData: any){
-		let newObj  = shopResponseData.getShopProducts;
-	    for (let i = 0; i < newObj.productList.length; ++i) {
-	       	this.shopContentArray.push(newObj.productList[i]);
-	    }
-	}
+  shopSubCategoryResponseHandler(shopSubCategoryResponse:any){
+    this.subCategoryDetailArray = [];
+    let subCat = shopSubCategoryResponse.getShopSubCategory.shopSubCategory;
+    for(let i = 0; i< subCat.length; i++){
+        this.subCategoryDetailArray.push(subCat[i])
+      }
+  }
 
-	shopCategoryHandler(shopCategoryResponse: any){
-		this.categoryArray = shopCategoryResponse.getShopCategory.shopCategory ;
-		this.subCategoryArray = shopCategoryResponse.getShopCategory.shopSubCategory;
-	}
-
-	/*shopSubCategory(){
-		if(this.subCategoryArray[i]. ==){
-
-		}
-		if(this.subCategoryArray[i]){
-
-		}
-	}*/
-
-	getCategory(categoryId:any){
+	getDataByCategory(category:any){
+    console.log("getDataByCategory", category);
 		this.pageId= 1;
-		this.categoryId = categoryId;
+		if(category.shopID == 1){
+      this.categoryId = "1";
+    }else{
+      this.categoryId = "55";
+    }
 		this.shopContentArray = [];
-		this.getData(this.pageId, this.categoryId);
+    this.subCategoryDetailArray = [];
+    this.getSubCategory(category);
+		this.getShopData(this.pageId, this.categoryId);
 	}
 
+	getBackgroundCss(category:any){
 
-
+  }
 
 	getShopImageUrl(shopContent:any):string{
 		let shopImage = 'http://res.cloudinary.com/moode-cloudinary/image/upload/v1504506749/' + shopContent.album[0]
@@ -169,6 +184,8 @@ export class ShopComponent {
 		}
 		return mrp;
 	}
+
+
 	productSellingPrice(shopContent: any):boolean{
 		let sellingPrice = false;
 		if(shopContent.sellingPrice != null && shopContent.sellingPrice != 0 ){
@@ -177,28 +194,20 @@ export class ShopComponent {
 		return sellingPrice;
 	}
 
+
 	getBackgroundImage(){
 		let imageUrl ;
 		return imageUrl = "resources/icons/marketplace.png"
 	}
 
-	getSubCategory(shopID: number){
-		let subCat = this.subCategoryArray;
-		this.subCategoryMenArray = [];
-		console.log("subCat", subCat);
-		for(let i = 0; i< this.subCategoryArray.length; i++){
-			if(this.subCategoryArray[i].shopID == shopID){
-				this.subCategoryMenArray.push(subCat[i])
-			}/*else{
-				this.subCategoryWomenArray.push(subCat[i])
-			}*/
-		}
-		console.log("Men", this.subCategoryMenArray);
-	}
 
 	getSubCategoryImage(subCategory: any){
 		let subCategoryImage = subCategory.imageName;
 		subCategoryImage = subCategoryImage.replace("size", "100");
         return subCategoryImage;
 	}
+
+	goToProductDetail(shopContent: any){
+    this.router.navigate(['/shop', shopContent.productKey])
+  }
 }
